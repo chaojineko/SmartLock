@@ -1,6 +1,6 @@
 Dependencies for Project 'projectfreertos', Target 'projectfreertos': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (startup_stm32f407xx.s)(0x69C0AE3B)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include--pd "__UVISION_VERSION SETA 543" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o projectfreertos\startup_stm32f407xx.o --depend projectfreertos\startup_stm32f407xx.d)
+F (startup_stm32f407xx.s)(0x69C12322)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include--pd "__UVISION_VERSION SETA 543" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o projectfreertos\startup_stm32f407xx.o --depend projectfreertos\startup_stm32f407xx.d)
 F (..\Core\Src\uart_debug.c)(0x69C0F25E)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\uart_debug.o --omf_browse projectfreertos\uart_debug.crf --depend projectfreertos\uart_debug.d)
 I (../Core/Inc/uart_debug.h)(0x69B942DB)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
@@ -48,13 +48,13 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/task.h)(0x69A554DA)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/list.h)(0x69A554DA)
 I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x69A554DA)
 I (../Core/Inc/usart.h)(0x69B93E8C)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (D:\keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (D:\keil_v5\ARM\ARMCC\include\string.h)(0x6025237E)
 I (D:\keil_v5\ARM\ARMCC\include\stdbool.h)(0x6025237C)
 F (..\Core\Src\keyboard.c)(0x69BA6071)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\keyboard.o --omf_browse projectfreertos\keyboard.crf --depend projectfreertos\keyboard.d)
 I (../Core/Inc/keyboard.h)(0x69BA6071)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -99,9 +99,9 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h)(0x69A554DA
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/task.h)(0x69A554DA)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/list.h)(0x69A554DA)
 I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x69A554DA)
-F (..\Core\Src\servo.c)(0x69BD3E51)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\servo.o --omf_browse projectfreertos\servo.crf --depend projectfreertos\servo.d)
+F (..\Core\Src\servo.c)(0x69C124A5)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\servo.o --omf_browse projectfreertos\servo.crf --depend projectfreertos\servo.d)
 I (../Core/Inc/servo.h)(0x69BA6071)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -149,7 +149,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/list.h)(0x69A554DA)
 I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x69A554DA)
 F (..\Core\Src\OLED\oled.c)(0x69BE5E6B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\oled.o --omf_browse projectfreertos\oled.crf --depend projectfreertos\oled.d)
 I (..\Core\Src\OLED\oled.h)(0x69BBB6BE)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -198,7 +198,7 @@ I (D:\keil_v5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (..\Core\Src\OLED\oledfont.h)(0x6376DA60)
 F (..\Core\Src\MENU\menu.c)(0x69C0F739)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\menu.o --omf_browse projectfreertos\menu.crf --depend projectfreertos\menu.d)
 I (..\Core\Src\MENU\menu.h)(0x69C0E029)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -255,7 +255,7 @@ I (../Core/Inc/servo.h)(0x69BA6071)
 I (../Core/Inc/sfm.h)(0x69C0A81A)
 I (../Core/Src/RFID/rc522.h)(0x69C096BE)
 F (..\Core\Src\sfm.c)(0x69C0F25E)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\sfm.o --omf_browse projectfreertos\sfm.crf --depend projectfreertos\sfm.d)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -306,7 +306,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/list.h)(0x69A554DA)
 I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x69A554DA)
 I (../Core/Inc/sfm.h)(0x69C0A81A)
 F (..\Core\Src\RFID\rc522.c)(0x69C0F119)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\rc522.o --omf_browse projectfreertos\rc522.crf --depend projectfreertos\rc522.d)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -356,7 +356,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/list.h)(0x69A554DA)
 I (../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h)(0x69A554DA)
 I (../Core/Inc/spi.h)(0x69BE0DDE)
 F (../Core/Src/main.c)(0x69C0A7CD)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\main.o --omf_browse projectfreertos\main.crf --depend projectfreertos\main.d)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -409,9 +409,9 @@ I (../Core/Inc/gpio.h)(0x69B8EEE0)
 I (../Core/Inc/uart_debug.h)(0x69B942DB)
 I (../Core/Src/MENU/menu.h)(0x69C0E029)
 I (../Core/Inc/sfm.h)(0x69C0A81A)
-F (../Core/Src/gpio.c)(0x69BE0DDC)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\gpio.o --omf_browse projectfreertos\gpio.crf --depend projectfreertos\gpio.d)
+F (../Core/Src/gpio.c)(0x69C1231E)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\gpio.o --omf_browse projectfreertos\gpio.crf --depend projectfreertos\gpio.d)
 I (../Core/Inc/gpio.h)(0x69B8EEE0)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -457,7 +457,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h)(0x69A554DA)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/task.h)(0x69A554DA)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/list.h)(0x69A554DA)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -496,7 +496,7 @@ I (../Core/Src/RFID/rc522.h)(0x69C096BE)
 I (D:\keil_v5\ARM\ARMCC\include\stdio.h)(0x60252374)
 F (../Core/Src/rtc.c)(0x69BBE61D)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\rtc.o --omf_browse projectfreertos\rtc.crf --depend projectfreertos\rtc.d)
 I (../Core/Inc/rtc.h)(0x69BBE61D)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -532,7 +532,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x69A5556E)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69A5556E)
 F (../Core/Src/spi.c)(0x69C09CC4)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\spi.o --omf_browse projectfreertos\spi.crf --depend projectfreertos\spi.d)
 I (../Core/Inc/spi.h)(0x69BE0DDE)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -568,7 +568,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x69A5556E)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69A5556E)
 F (../Core/Src/tim.c)(0x69BD38EB)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\tim.o --omf_browse projectfreertos\tim.crf --depend projectfreertos\tim.d)
 I (../Core/Inc/tim.h)(0x69BA4D92)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -604,7 +604,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x69A5556E)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69A5556E)
 F (../Core/Src/usart.c)(0x69C0AE39)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\usart.o --omf_browse projectfreertos\usart.crf --depend projectfreertos\usart.d)
 I (../Core/Inc/usart.h)(0x69B93E8C)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -639,7 +639,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x69A5556E)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x69A5556E)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69A5556E)
 F (../Core/Src/stm32f4xx_it.c)(0x69BD054B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\stm32f4xx_it.o --omf_browse projectfreertos\stm32f4xx_it.crf --depend projectfreertos\stm32f4xx_it.d)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)
@@ -675,7 +675,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x69A5556E)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_it.h)(0x69BD054B)
 F (../Core/Src/stm32f4xx_hal_msp.c)(0x69B8EEE1)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Src/OLED -I ../Core/Src/MENU -I ../Core/Src/RFID-I.\RTE\_projectfreertos-IC:\Users\13753\AppData\Local\Arm\Packs\ARM\CMSIS\6.3.0\CMSIS\Core\Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o projectfreertos\stm32f4xx_hal_msp.o --omf_browse projectfreertos\stm32f4xx_hal_msp.crf --depend projectfreertos\stm32f4xx_hal_msp.d)
-I (../Core/Inc/main.h)(0x69BE0DDE)
+I (../Core/Inc/main.h)(0x69C12321)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69A5556E)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69BE0DDE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x69A5556E)

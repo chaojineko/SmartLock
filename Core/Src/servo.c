@@ -29,6 +29,7 @@
 #define SERVO_ANGLE_MAX         180.0f
 #define SERVO_LOCK_ANGLE        0.0f
 #define SERVO_UNLOCK_ANGLE      90.0f
+#define BEEP_PULSE_MS           120U
 
 /**
  * @brief  Initialize servo control with PWM
@@ -81,5 +82,9 @@ void Servo_Lock(void)
  */
 void Servo_Unlock(void)
 {
+    HAL_GPIO_WritePin(BEEP_GPIO_Port, BEEP_Pin, GPIO_PIN_SET);
+    osDelay(BEEP_PULSE_MS);
+    HAL_GPIO_WritePin(BEEP_GPIO_Port, BEEP_Pin, GPIO_PIN_RESET);
+
     Servo_SetAngle(SERVO_UNLOCK_ANGLE);
 }

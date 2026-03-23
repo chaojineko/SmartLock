@@ -65,6 +65,8 @@ void Error_Handler(void);
 #define KEY3_GPIO_Port GPIOE
 #define SFM_TOUCH_Pin GPIO_PIN_6
 #define SFM_TOUCH_GPIO_Port GPIOE
+#define BEEP_Pin GPIO_PIN_8
+#define BEEP_GPIO_Port GPIOF
 #define KEY0_Pin GPIO_PIN_0
 #define KEY0_GPIO_Port GPIOA
 #define C1_Pin GPIO_PIN_7
