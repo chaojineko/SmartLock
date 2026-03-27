@@ -49,8 +49,11 @@ uint8_t RFID_VerifyStoredCard(uint8_t *cardID);
 uint8_t RFID_GetCurrentCardID(uint8_t *cardID);
 void RFID_Test(void);
 uint8_t RFID_StoreCard(uint8_t *cardID);
+uint8_t RFID_RemoveStoredCard(uint8_t *cardID);
 uint8_t RFID_GetStoredCardCount(void);
 void RFID_ClearStoredCards(void);
+void RFID_ExportStoredCards(uint8_t *flat_cards, uint8_t max_cards, uint8_t *out_count);
+void RFID_ImportStoredCards(const uint8_t *flat_cards, uint8_t count);
 void RFID_Demo(void);
 /////////////////////////////////////////////////////////////////////
 //MF522???

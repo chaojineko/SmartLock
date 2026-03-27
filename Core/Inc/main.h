@@ -96,6 +96,9 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
+#define FLASH_CS_Pin GPIO_PIN_14
+#define FLASH_CS_GPIO_Port GPIOB
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

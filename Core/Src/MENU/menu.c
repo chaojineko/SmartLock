@@ -14,6 +14,8 @@
 #include "servo.h"
 #include "sfm.h"
 #include "rc522.h"
+#include "usart.h"
+#include "../FLASH/flash.h"
 
 // 当前UI状态，默认为欢迎界面
 static UI_State_t current_ui_state = UI_STATE_WELCOME;
@@ -23,24 +25,39 @@ static uint8_t main_menu_force_redraw = 1;
 // 函数声明
 static void display_welcome(void);
 static void display_main_menu(void);
+static void display_admin_verify(void);
 static void display_password_unlock(void);
 static void display_add_password(void);
+static void display_del_password(void);
 static void display_fingerprint_unlock(void);
 static void display_add_fingerprint(void);
 static void display_del_fingerprint(void);
 static void display_fingerprint_result(void);
 static void display_rfid_unlock(void);
 static void display_add_rfid(void);
+static void display_del_rfid(void);
 static void display_rfid_result(void);
+static void display_face_unlock(void);
+static void display_qr_unlock(void);
+static void display_ble_unlock(void);
+static void display_add_face(void);
+static void display_del_face(void);
+static void menu_esp32_send_cmd(const char *cmd);
+static void menu_esp32_set_mode(const char *mode_cmd);
+static uint8_t menu_cursor_requires_admin(int8_t cursor);
 static int32_t menu_sfm_ensure_ready(void);
+static void menu_load_lock_data(void);
+static void menu_save_lock_data(void);
 
-#define MENU_ITEM_COUNT 7
+#define MENU_ITEM_COUNT 14
+#define MENU_MODE_TIMEOUT_MS 15000U
 
 // 密码输入相关
 static char password_buffer[7] = {0};
 static uint8_t password_index = 0;
 static char saved_password[7] = "123456";
 static uint8_t saved_password_len = 6;
+static UI_State_t admin_next_state = UI_STATE_MAIN_MENU;
 
 // RFID验证相关
 
@@ -49,6 +66,57 @@ static uint16_t fingerprint_user_id = 0;
 static uint8_t sfm_ready = 0;
 static char del_fp_id_buf[4] = {0};
 static uint8_t del_fp_id_len = 0;
+
+static void menu_load_lock_data(void)
+{
+    LockPersistData_t persist;
+
+    if (FlashStorage_Init() == 0U)
+    {
+        printf("[LOCK DATA] SPI flash not detected, use default data.\r\n");
+        return;
+    }
+
+    if (FlashStorage_Load(&persist) == 0U)
+    {
+        printf("[LOCK DATA] No valid record, use default data.\r\n");
+        return;
+    }
+
+    if ((persist.password_len >= 4U) && (persist.password_len <= 6U))
+    {
+        memset(saved_password, 0, sizeof(saved_password));
+        memcpy(saved_password, persist.password, persist.password_len);
+        saved_password[persist.password_len] = '\0';
+        saved_password_len = persist.password_len;
+    }
+
+    RFID_ImportStoredCards((const uint8_t *)persist.cards, persist.card_count);
+    printf("[LOCK DATA] Loaded: pwd_len=%u, cards=%u\r\n", saved_password_len, persist.card_count);
+}
+
+static void menu_save_lock_data(void)
+{
+    LockPersistData_t persist;
+    uint8_t card_count = 0U;
+
+    memset(&persist, 0, sizeof(persist));
+
+    persist.password_len = saved_password_len;
+    memcpy(persist.password, saved_password, sizeof(saved_password));
+
+    RFID_ExportStoredCards((uint8_t *)persist.cards, LOCK_MAX_RFID_CARDS, &card_count);
+    persist.card_count = card_count;
+
+    if (FlashStorage_Save(&persist) == 0U)
+    {
+        printf("[LOCK DATA] Save failed.\r\n");
+    }
+    else
+    {
+        printf("[LOCK DATA] Saved: pwd_len=%u, cards=%u\r\n", persist.password_len, persist.card_count);
+    }
+}
 
 static int32_t menu_sfm_ensure_ready(void)
 {
@@ -68,6 +136,38 @@ static int32_t menu_sfm_ensure_ready(void)
     return sfm_rt;
 }
 
+static void menu_esp32_send_cmd(const char *cmd)
+{
+    char tx[32] = {0};
+    int len;
+
+    if (cmd == NULL)
+    {
+        return;
+    }
+
+    len = snprintf(tx, sizeof(tx), "%s\r\n", cmd);
+    if ((len <= 0) || (len > (int)sizeof(tx)))
+    {
+        return;
+    }
+
+    (void)HAL_UART_Transmit(&huart3, (uint8_t *)tx, (uint16_t)len, 120);
+    printf("[MENU->ESP32] %s\r\n", cmd);
+}
+
+static void menu_esp32_set_mode(const char *mode_cmd)
+{
+    menu_esp32_send_cmd(mode_cmd);
+    // Let ESP32 mode task consume the command before UI loop proceeds.
+    vTaskDelay(pdMS_TO_TICKS(40));
+}
+
+static uint8_t menu_cursor_requires_admin(int8_t cursor)
+{
+    return (cursor >= 6) ? 1U : 0U;
+}
+
 void Task_UI(void *argument)
 {
     static UI_State_t prev_ui_state = UI_STATE_WELCOME;
@@ -76,6 +176,7 @@ void Task_UI(void *argument)
     OLED_Init();
     Servo_Init();
     RFID_Init();
+    menu_load_lock_data();
     sfm_rt = sfm_init(SFM_UART_BAUD);
     if (sfm_rt != SFM_ACK_SUCCESS)
     {
@@ -106,6 +207,9 @@ void Task_UI(void *argument)
             case UI_STATE_MAIN_MENU:
                 display_main_menu();
                 break;
+            case UI_STATE_ADMIN_VERIFY:
+                display_admin_verify();
+                break;
             case UI_STATE_PASSWORD_UNLOCK:
                 display_password_unlock();
                 break;
@@ -125,15 +229,36 @@ void Task_UI(void *argument)
             case UI_STATE_ADD_PASSWORD:
                 display_add_password();
                 break;
+            case UI_STATE_DEL_PASSWORD:
+                display_del_password();
+                break;
             case UI_STATE_RFID_UNLOCK:
                 display_rfid_unlock();
                 break;
             case UI_STATE_ADD_RFID:
                 display_add_rfid();
                 break;
+            case UI_STATE_DEL_RFID:
+                display_del_rfid();
+                break;
             case UI_STATE_RFID_SUCCESS:
             case UI_STATE_RFID_FAILED:
                 display_rfid_result();
+                break;
+            case UI_STATE_FACE_UNLOCK:
+                display_face_unlock();
+                break;
+            case UI_STATE_QR_UNLOCK:
+                display_qr_unlock();
+                break;
+            case UI_STATE_BLE_UNLOCK:
+                display_ble_unlock();
+                break;
+            case UI_STATE_ADD_FACE:
+                display_add_face();
+                break;
+            case UI_STATE_DEL_FACE:
+                display_del_face();
                 break;
             default:
                 current_ui_state = UI_STATE_WELCOME;
@@ -218,16 +343,24 @@ static void display_main_menu(void)
 
     static const char *menu_items[MENU_ITEM_COUNT] = {
         "Pwd Unlock",
+        "Face Unlock",
+        "QR Unlock",
+        "BLE Unlock",
         "Fp Unlock",
         "RFID Unlock",
         "Add Pwd",
+        "Del Pwd",
+        "Add Face",
+        "Del Face",
         "Add Fp",
         "Add RFID",
+        "Del RFID",
         "Del Fp"
     };
 
     uint8_t card_count = RFID_GetStoredCardCount();
-    uint8_t page = (uint8_t)(menu_cursor / 4);      // 0 or 1
+    uint8_t page_count = (uint8_t)((MENU_ITEM_COUNT + 3U) / 4U);
+    uint8_t page = (uint8_t)(menu_cursor / 4);
     uint8_t page_start = page * 4;
     uint8_t page_end = (uint8_t)((page_start + 4) > MENU_ITEM_COUNT ? MENU_ITEM_COUNT : (page_start + 4));
 
@@ -241,7 +374,7 @@ static void display_main_menu(void)
 
         // 第0行：标题 + 卡片数 + 页码
         OLED_ShowString(0, 0, (uint8_t *)"Smart Lock", 8);
-        snprintf(info_line, sizeof(info_line), "C:%02d P:%d/2", card_count, page + 1);
+        snprintf(info_line, sizeof(info_line), "C:%02d P:%d/%d", card_count, page + 1, page_count);
         OLED_ShowString(56, 0, (uint8_t *)info_line, 8);
 
         // 第1行：分隔线
@@ -294,34 +427,75 @@ static void display_main_menu(void)
         }
         else if (key_char == '#') // Confirm
         {
+            UI_State_t selected_state = UI_STATE_MAIN_MENU;
+
             if (menu_cursor == 0)
             {
-                current_ui_state = UI_STATE_PASSWORD_UNLOCK;
+                selected_state = UI_STATE_PASSWORD_UNLOCK;
             }
             else if (menu_cursor == 1)
             {
-                current_ui_state = UI_STATE_FINGERPRINT_UNLOCK;
+                selected_state = UI_STATE_FACE_UNLOCK;
             }
             else if (menu_cursor == 2)
             {
-                current_ui_state = UI_STATE_RFID_UNLOCK;
+                selected_state = UI_STATE_QR_UNLOCK;
             }
             else if (menu_cursor == 3)
             {
-                current_ui_state = UI_STATE_ADD_PASSWORD;
+                selected_state = UI_STATE_BLE_UNLOCK;
             }
             else if (menu_cursor == 4)
             {
-                current_ui_state = UI_STATE_ADD_FINGERPRINT;
+                selected_state = UI_STATE_FINGERPRINT_UNLOCK;
             }
             else if (menu_cursor == 5)
             {
-                current_ui_state = UI_STATE_ADD_RFID;
+                selected_state = UI_STATE_RFID_UNLOCK;
             }
             else if (menu_cursor == 6)
             {
-                current_ui_state = UI_STATE_DEL_FINGERPRINT;
+                selected_state = UI_STATE_ADD_PASSWORD;
             }
+            else if (menu_cursor == 7)
+            {
+                selected_state = UI_STATE_DEL_PASSWORD;
+            }
+            else if (menu_cursor == 8)
+            {
+                selected_state = UI_STATE_ADD_FACE;
+            }
+            else if (menu_cursor == 9)
+            {
+                selected_state = UI_STATE_DEL_FACE;
+            }
+            else if (menu_cursor == 10)
+            {
+                selected_state = UI_STATE_ADD_FINGERPRINT;
+            }
+            else if (menu_cursor == 11)
+            {
+                selected_state = UI_STATE_ADD_RFID;
+            }
+            else if (menu_cursor == 12)
+            {
+                selected_state = UI_STATE_DEL_RFID;
+            }
+            else if (menu_cursor == 13)
+            {
+                selected_state = UI_STATE_DEL_FINGERPRINT;
+            }
+
+            if (menu_cursor_requires_admin(menu_cursor) != 0U)
+            {
+                admin_next_state = selected_state;
+                current_ui_state = UI_STATE_ADMIN_VERIFY;
+            }
+            else
+            {
+                current_ui_state = selected_state;
+            }
+
             memset(password_buffer, 0, sizeof(password_buffer));
             password_index = 0;
             OLED_Clear();
@@ -330,6 +504,88 @@ static void display_main_menu(void)
         {
             current_ui_state = UI_STATE_WELCOME;
             OLED_Clear();
+        }
+    }
+}
+
+static void display_admin_verify(void)
+{
+    static uint8_t first_entry = 1;
+    static uint8_t last_len = 0xFF;
+    static char verify_buf[7] = {0};
+    static uint8_t verify_len = 0;
+
+    if (first_entry)
+    {
+        memset(verify_buf, 0, sizeof(verify_buf));
+        verify_len = 0;
+        last_len = 0xFF;
+        OLED_Clear();
+        first_entry = 0;
+    }
+
+    if (last_len != verify_len)
+    {
+        char masked[7] = {0};
+        for (uint8_t i = 0; i < verify_len && i < 6; i++)
+        {
+            masked[i] = '*';
+        }
+
+        OLED_Clear();
+        OLED_ShowString(0, 0, (uint8_t *)"Admin Verify", 8);
+        OLED_ShowString(0, 1, (uint8_t *)"----------------", 8);
+        OLED_ShowString(0, 3, (uint8_t *)"Pwd:", 8);
+        OLED_ShowString(32, 3, (uint8_t *)masked, 8);
+        OLED_ShowString(0, 5, (uint8_t *)"#=OK *=Cancel", 8);
+        last_len = verify_len;
+    }
+
+    {
+        int key = Keypad_Scan();
+        if (key != KEYPAD_NO_KEY)
+        {
+            while (Keypad_Scan() != KEYPAD_NO_KEY)
+            {
+                vTaskDelay(pdMS_TO_TICKS(20));
+            }
+
+            {
+                char key_char = Keypad_GetChar(key);
+
+                if ((key_char >= '0') && (key_char <= '9') && (verify_len < 6))
+                {
+                    verify_buf[verify_len++] = key_char;
+                    verify_buf[verify_len] = '\0';
+                }
+                else if (key_char == '#')
+                {
+                    if ((verify_len == saved_password_len) && (strcmp(verify_buf, saved_password) == 0))
+                    {
+                        current_ui_state = admin_next_state;
+                    }
+                    else
+                    {
+                        OLED_Clear();
+                        OLED_ShowString(0, 3, (uint8_t *)"Auth Failed", 8);
+                        vTaskDelay(pdMS_TO_TICKS(1000));
+                        current_ui_state = UI_STATE_MAIN_MENU;
+                    }
+
+                    memset(verify_buf, 0, sizeof(verify_buf));
+                    verify_len = 0;
+                    first_entry = 1;
+                    OLED_Clear();
+                }
+                else if (key_char == '*')
+                {
+                    current_ui_state = UI_STATE_MAIN_MENU;
+                    memset(verify_buf, 0, sizeof(verify_buf));
+                    verify_len = 0;
+                    first_entry = 1;
+                    OLED_Clear();
+                }
+            }
         }
     }
 }
@@ -688,6 +944,7 @@ static void display_add_password(void)
                 {
                     memcpy(saved_password, first_password, sizeof(saved_password));
                     saved_password_len = (uint8_t)strlen(saved_password);
+                    menu_save_lock_data();
                     OLED_ShowString(0, 3, (uint8_t *)"Password Saved", 8);
                 }
                 else
@@ -725,6 +982,377 @@ static void display_add_password(void)
                 OLED_Clear();
                 first_entry = 1;
             }
+        }
+    }
+}
+
+static void display_del_password(void)
+{
+    static uint8_t first_entry = 1;
+
+    if (first_entry)
+    {
+        OLED_Clear();
+        OLED_ShowString(0, 0, (uint8_t *)"Delete Password", 8);
+        OLED_ShowString(0, 1, (uint8_t *)"----------------", 8);
+        OLED_ShowString(0, 3, (uint8_t *)"#=Reset Default", 8);
+        OLED_ShowString(0, 5, (uint8_t *)"*=Back", 8);
+        first_entry = 0;
+    }
+
+    {
+        int key = Keypad_Scan();
+        if (key != KEYPAD_NO_KEY)
+        {
+            while (Keypad_Scan() != KEYPAD_NO_KEY) { vTaskDelay(pdMS_TO_TICKS(20)); }
+
+            if (Keypad_GetChar(key) == '#')
+            {
+                memcpy(saved_password, "123456", sizeof(saved_password));
+                saved_password_len = 6;
+                menu_save_lock_data();
+
+                OLED_Clear();
+                OLED_ShowString(0, 3, (uint8_t *)"Password Reset", 8);
+                OLED_ShowString(0, 5, (uint8_t *)"Default:123456", 8);
+                vTaskDelay(pdMS_TO_TICKS(1500));
+                current_ui_state = UI_STATE_MAIN_MENU;
+                first_entry = 1;
+                OLED_Clear();
+            }
+            else if (Keypad_GetChar(key) == '*')
+            {
+                current_ui_state = UI_STATE_MAIN_MENU;
+                first_entry = 1;
+                OLED_Clear();
+            }
+        }
+    }
+}
+
+static void display_face_unlock(void)
+{
+    static uint8_t first_entry = 1;
+    static uint32_t start_tick = 0;
+    static int32_t last_left_sec = -1;
+
+    if (first_entry)
+    {
+        menu_esp32_set_mode("MODE_FACE");
+        OLED_Clear();
+        OLED_ShowString(0, 0, (uint8_t *)"Face Unlock", 8);
+        OLED_ShowString(0, 1, (uint8_t *)"----------------", 8);
+        OLED_ShowString(0, 3, (uint8_t *)"Look at camera", 8);
+        OLED_ShowString(0, 7, (uint8_t *)"*=Stop", 8);
+        start_tick = xTaskGetTickCount();
+        last_left_sec = -1;
+        first_entry = 0;
+    }
+
+    {
+        int32_t left_sec = (int32_t)(MENU_MODE_TIMEOUT_MS / 1000U) -
+                           (int32_t)((xTaskGetTickCount() - start_tick) / pdMS_TO_TICKS(1000));
+        if (left_sec < 0)
+        {
+            left_sec = 0;
+        }
+
+        if (left_sec != last_left_sec)
+        {
+            char line[17] = {0};
+            snprintf(line, sizeof(line), "Timeout:%2lds", (long)left_sec);
+            OLED_ShowString(0, 5, (uint8_t *)"                ", 8);
+            OLED_ShowString(0, 5, (uint8_t *)line, 8);
+            last_left_sec = left_sec;
+        }
+
+        if ((xTaskGetTickCount() - start_tick) >= pdMS_TO_TICKS(MENU_MODE_TIMEOUT_MS))
+        {
+            menu_esp32_set_mode("MODE_OFF");
+            current_ui_state = UI_STATE_MAIN_MENU;
+            first_entry = 1;
+            OLED_Clear();
+            return;
+        }
+
+        {
+            int key = Keypad_Scan();
+            if ((key != KEYPAD_NO_KEY) && (Keypad_GetChar(key) == '*'))
+            {
+                menu_esp32_set_mode("MODE_OFF");
+                current_ui_state = UI_STATE_MAIN_MENU;
+                first_entry = 1;
+                OLED_Clear();
+            }
+        }
+    }
+}
+
+static void display_qr_unlock(void)
+{
+    static uint8_t first_entry = 1;
+    static uint32_t start_tick = 0;
+    static int32_t last_left_sec = -1;
+
+    if (first_entry)
+    {
+        menu_esp32_set_mode("MODE_QR");
+        OLED_Clear();
+        OLED_ShowString(0, 0, (uint8_t *)"QR Unlock", 8);
+        OLED_ShowString(0, 1, (uint8_t *)"----------------", 8);
+        OLED_ShowString(0, 3, (uint8_t *)"Show QR to cam", 8);
+        OLED_ShowString(0, 7, (uint8_t *)"*=Stop", 8);
+        start_tick = xTaskGetTickCount();
+        last_left_sec = -1;
+        first_entry = 0;
+    }
+
+    {
+        int32_t left_sec = (int32_t)(MENU_MODE_TIMEOUT_MS / 1000U) -
+                           (int32_t)((xTaskGetTickCount() - start_tick) / pdMS_TO_TICKS(1000));
+        if (left_sec < 0)
+        {
+            left_sec = 0;
+        }
+
+        if (left_sec != last_left_sec)
+        {
+            char line[17] = {0};
+            snprintf(line, sizeof(line), "Timeout:%2lds", (long)left_sec);
+            OLED_ShowString(0, 5, (uint8_t *)"                ", 8);
+            OLED_ShowString(0, 5, (uint8_t *)line, 8);
+            last_left_sec = left_sec;
+        }
+
+        if ((xTaskGetTickCount() - start_tick) >= pdMS_TO_TICKS(MENU_MODE_TIMEOUT_MS))
+        {
+            menu_esp32_set_mode("MODE_OFF");
+            current_ui_state = UI_STATE_MAIN_MENU;
+            first_entry = 1;
+            OLED_Clear();
+            return;
+        }
+
+        {
+            int key = Keypad_Scan();
+            if ((key != KEYPAD_NO_KEY) && (Keypad_GetChar(key) == '*'))
+            {
+                menu_esp32_set_mode("MODE_OFF");
+                current_ui_state = UI_STATE_MAIN_MENU;
+                first_entry = 1;
+                OLED_Clear();
+            }
+        }
+    }
+}
+
+static void display_ble_unlock(void)
+{
+    static uint8_t first_entry = 1;
+    static uint32_t start_tick = 0;
+    static int32_t last_left_sec = -1;
+
+    if (first_entry)
+    {
+        menu_esp32_set_mode("MODE_BLE");
+        OLED_Clear();
+        OLED_ShowString(0, 0, (uint8_t *)"BLE Unlock", 8);
+        OLED_ShowString(0, 1, (uint8_t *)"----------------", 8);
+        OLED_ShowString(0, 3, (uint8_t *)"Use mini program", 8);
+        OLED_ShowString(0, 4, (uint8_t *)"Tap BLE unlock", 8);
+        OLED_ShowString(0, 7, (uint8_t *)"*=Stop", 8);
+        start_tick = xTaskGetTickCount();
+        last_left_sec = -1;
+        first_entry = 0;
+    }
+
+    {
+        int32_t left_sec = (int32_t)(MENU_MODE_TIMEOUT_MS / 1000U) -
+                           (int32_t)((xTaskGetTickCount() - start_tick) / pdMS_TO_TICKS(1000));
+        if (left_sec < 0)
+        {
+            left_sec = 0;
+        }
+
+        if (left_sec != last_left_sec)
+        {
+            char line[17] = {0};
+            snprintf(line, sizeof(line), "Timeout:%2lds", (long)left_sec);
+            OLED_ShowString(0, 5, (uint8_t *)"                ", 8);
+            OLED_ShowString(0, 5, (uint8_t *)line, 8);
+            last_left_sec = left_sec;
+        }
+
+        if ((xTaskGetTickCount() - start_tick) >= pdMS_TO_TICKS(MENU_MODE_TIMEOUT_MS))
+        {
+            menu_esp32_set_mode("MODE_OFF");
+            current_ui_state = UI_STATE_MAIN_MENU;
+            first_entry = 1;
+            OLED_Clear();
+            return;
+        }
+
+        {
+            int key = Keypad_Scan();
+            if ((key != KEYPAD_NO_KEY) && (Keypad_GetChar(key) == '*'))
+            {
+                menu_esp32_set_mode("MODE_OFF");
+                current_ui_state = UI_STATE_MAIN_MENU;
+                first_entry = 1;
+                OLED_Clear();
+            }
+        }
+    }
+}
+
+static void display_add_face(void)
+{
+    static uint8_t first_entry = 1;
+    static uint32_t start_tick = 0;
+
+    if (first_entry)
+    {
+        menu_esp32_set_mode("FACE_ADD");
+        OLED_Clear();
+        OLED_ShowString(0, 0, (uint8_t *)"Add Face", 8);
+        OLED_ShowString(0, 1, (uint8_t *)"----------------", 8);
+        OLED_ShowString(0, 3, (uint8_t *)"Look at camera", 8);
+        OLED_ShowString(0, 5, (uint8_t *)"Wait auto save", 8);
+        OLED_ShowString(0, 7, (uint8_t *)"*=Cancel", 8);
+        start_tick = xTaskGetTickCount();
+        first_entry = 0;
+    }
+
+    if ((xTaskGetTickCount() - start_tick) >= pdMS_TO_TICKS(10000))
+    {
+        menu_esp32_set_mode("MODE_OFF");
+        current_ui_state = UI_STATE_MAIN_MENU;
+        first_entry = 1;
+        OLED_Clear();
+        return;
+    }
+
+    {
+        int key = Keypad_Scan();
+        if ((key != KEYPAD_NO_KEY) && (Keypad_GetChar(key) == '*'))
+        {
+            menu_esp32_set_mode("MODE_OFF");
+            current_ui_state = UI_STATE_MAIN_MENU;
+            first_entry = 1;
+            OLED_Clear();
+        }
+    }
+}
+
+static void display_del_face(void)
+{
+    static uint8_t first_entry = 1;
+
+    if (first_entry)
+    {
+        OLED_Clear();
+        OLED_ShowString(0, 0, (uint8_t *)"Delete Face", 8);
+        OLED_ShowString(0, 1, (uint8_t *)"----------------", 8);
+        OLED_ShowString(0, 3, (uint8_t *)"#=Delete All", 8);
+        OLED_ShowString(0, 5, (uint8_t *)"*=Back", 8);
+        first_entry = 0;
+    }
+
+    {
+        int key = Keypad_Scan();
+        if (key != KEYPAD_NO_KEY)
+        {
+            while (Keypad_Scan() != KEYPAD_NO_KEY) { vTaskDelay(pdMS_TO_TICKS(20)); }
+
+            if (Keypad_GetChar(key) == '#')
+            {
+                menu_esp32_set_mode("FACE_DEL");
+                menu_esp32_set_mode("MODE_OFF");
+                OLED_Clear();
+                OLED_ShowString(0, 3, (uint8_t *)"Face Data Cleared", 8);
+                vTaskDelay(pdMS_TO_TICKS(1200));
+                current_ui_state = UI_STATE_MAIN_MENU;
+                first_entry = 1;
+                OLED_Clear();
+            }
+            else if (Keypad_GetChar(key) == '*')
+            {
+                current_ui_state = UI_STATE_MAIN_MENU;
+                first_entry = 1;
+                OLED_Clear();
+            }
+        }
+    }
+}
+
+static void display_del_rfid(void)
+{
+    static uint8_t first_entry = 1;
+    static uint32_t del_start_time = 0;
+    static int32_t last_left_sec = -1;
+    uint8_t card_id[4];
+
+    if (first_entry)
+    {
+        OLED_Clear();
+        OLED_ShowString(0, 0, (uint8_t *)"Delete RFID", 8);
+        OLED_ShowString(0, 1, (uint8_t *)"----------------", 8);
+        OLED_ShowString(0, 3, (uint8_t *)"Scan to delete", 8);
+        OLED_ShowString(0, 7, (uint8_t *)"*=Back", 8);
+        del_start_time = xTaskGetTickCount();
+        last_left_sec = -1;
+        first_entry = 0;
+    }
+
+    {
+        int32_t left_sec = 8 - (int32_t)((xTaskGetTickCount() - del_start_time) / pdMS_TO_TICKS(1000));
+        if (left_sec < 0) left_sec = 0;
+        if (left_sec != last_left_sec)
+        {
+            char line[17] = {0};
+            snprintf(line, sizeof(line), "Timeout: %lds", (long)left_sec);
+            OLED_ShowString(0, 5, (uint8_t *)"                ", 8);
+            OLED_ShowString(0, 5, (uint8_t *)line, 8);
+            last_left_sec = left_sec;
+        }
+    }
+
+    if (xTaskGetTickCount() - del_start_time < pdMS_TO_TICKS(8000))
+    {
+        if (RFID_VerifyCard(card_id))
+        {
+            OLED_Clear();
+            if (RFID_RemoveStoredCard(card_id))
+            {
+                menu_save_lock_data();
+                OLED_ShowString(0, 3, (uint8_t *)"RFID Deleted", 8);
+            }
+            else
+            {
+                OLED_ShowString(0, 3, (uint8_t *)"Card Not Found", 8);
+            }
+            vTaskDelay(pdMS_TO_TICKS(1200));
+            current_ui_state = UI_STATE_MAIN_MENU;
+            first_entry = 1;
+            OLED_Clear();
+            return;
+        }
+    }
+    else
+    {
+        current_ui_state = UI_STATE_MAIN_MENU;
+        first_entry = 1;
+        OLED_Clear();
+        return;
+    }
+
+    {
+        int key = Keypad_Scan();
+        if ((key != KEYPAD_NO_KEY) && (Keypad_GetChar(key) == '*'))
+        {
+            current_ui_state = UI_STATE_MAIN_MENU;
+            first_entry = 1;
+            OLED_Clear();
         }
     }
 }
@@ -836,6 +1464,7 @@ static void display_add_rfid(void)
             // 保存卡片到存储
             if (RFID_StoreCard(card_id))
             {
+                menu_save_lock_data();
                 current_ui_state = UI_STATE_RFID_SUCCESS;
                 first_entry = 1;
                 OLED_Clear();

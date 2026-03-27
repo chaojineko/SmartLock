@@ -28,6 +28,10 @@
 #include "menu.h"  // 添加UI任务头文件
 #include "rc522.h"
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include "usart.h"
+#include "servo.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -37,6 +41,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define UART3_LOG_RX_BYTES 0
 
 /* USER CODE END PD */
 
@@ -48,6 +53,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 void RFID_Test_Task(void *argument);  // RFID测试任务声明
+void ESP32_UART3_Task(void *argument); // ESP32串口命令任务
 /* All keyboard and servo logic has been moved to respective modules */
 
 /* USER CODE END Variables */
@@ -104,7 +110,17 @@ void MX_FREERTOS_Init(void) {
   /* add threads, ... */
     
   // 创建UI任务
-  xTaskCreate(Task_UI, "Task_UI", 256, NULL, 5, NULL);
+  if (xTaskCreate(Task_UI, "Task_UI", 256, NULL, 5, NULL) != pdPASS)
+  {
+    printf("[RTOS] Task_UI create failed\r\n");
+  }
+
+  // ESP32 <-> STM32 串口通信任务（USART3）
+  // 提高优先级，避免高负载时错过短命令帧
+  if (xTaskCreate(ESP32_UART3_Task, "ESP32_UART3", 256, NULL, 4, NULL) != pdPASS)
+  {
+    printf("[RTOS] ESP32_UART3 create failed\r\n");
+  }
   
     // 注意：菜单任务已负责RFID流程，这里不再创建测试任务，避免并发访问RC522/SPI造成读卡失败
     // xTaskCreate(RFID_Test_Task, "RFID_Test", 512, NULL, 4, NULL);
@@ -157,6 +173,175 @@ void RFID_Test_Task(void *argument)
     // 任务延时，让出CPU给其他任务
     // 每3秒执行一次完整的扫描/演示流程
     osDelay(3000);
+  }
+}
+
+static void ESP32_UART3_ProcessCmd(char *cmd,
+                                   uint32_t *last_unlock_tick,
+                                   uint32_t unlock_hold_ms,
+                                   uint8_t *is_unlocked)
+{
+  size_t start = 0U;
+  size_t end;
+  size_t i;
+  uint32_t now_tick;
+
+  if ((cmd == NULL) || (last_unlock_tick == NULL) || (is_unlocked == NULL))
+  {
+    return;
+  }
+
+  end = strlen(cmd);
+  while ((start < end) && ((cmd[start] == ' ') || (cmd[start] == '\t')))
+  {
+    start++;
+  }
+
+  while ((end > start) && ((cmd[end - 1U] == ' ') || (cmd[end - 1U] == '\t')))
+  {
+    cmd[end - 1U] = '\0';
+    end--;
+  }
+
+  if (start > 0U)
+  {
+    memmove(cmd, &cmd[start], (end - start) + 1U);
+  }
+
+  for (i = 0U; cmd[i] != '\0'; i++)
+  {
+    cmd[i] = (char)toupper((unsigned char)cmd[i]);
+  }
+
+  if (cmd[0] == '\0')
+  {
+    return;
+  }
+
+  if ((strcmp(cmd, "UNLOCK") == 0) || (strcmp(cmd, "U") == 0))
+  {
+    Servo_Unlock();
+    *last_unlock_tick = HAL_GetTick();
+    *is_unlocked = 1U;
+    HAL_UART_Transmit(&huart3, (uint8_t *)"ACK:UNLOCK\r\n", 12, 100);
+    printf("[ESP32 CMD] UNLOCK\r\n");
+  }
+  else if ((strcmp(cmd, "LOCK") == 0) || (strcmp(cmd, "L") == 0))
+  {
+    now_tick = HAL_GetTick();
+    if ((now_tick - *last_unlock_tick) >= unlock_hold_ms)
+    {
+      Servo_Lock();
+      *is_unlocked = 0U;
+      HAL_UART_Transmit(&huart3, (uint8_t *)"ACK:LOCK\r\n", 10, 100);
+      printf("[ESP32 CMD] LOCK\r\n");
+    }
+    else
+    {
+      HAL_UART_Transmit(&huart3, (uint8_t *)"ACK:LOCK:HOLD\r\n", 15, 100);
+      printf("[ESP32 CMD] LOCK ignored (hold)\r\n");
+    }
+  }
+  else if ((strcmp(cmd, "PING") == 0) || (strcmp(cmd, "P") == 0))
+  {
+    HAL_UART_Transmit(&huart3, (uint8_t *)"ACK:PING\r\n", 10, 100);
+    printf("[ESP32 CMD] PING\r\n");
+  }
+  else
+  {
+    HAL_UART_Transmit(&huart3, (uint8_t *)"ERR:CMD\r\n", 9, 100);
+    printf("[ESP32 CMD] unknown: %s\r\n", cmd);
+  }
+}
+
+void ESP32_UART3_Task(void *argument)
+{
+  uint8_t rx;
+  HAL_StatusTypeDef rx_status;
+  char cmd[32] = {0};
+  uint8_t idx = 0;
+  uint8_t is_unlocked = 0U;
+  uint32_t last_rx_tick = 0;
+  uint32_t last_unlock_tick = 0;
+  const char *boot_msg = "STM32_UART3_READY\r\n";
+  const uint32_t unlock_hold_ms = 5000U;
+  const uint32_t inter_byte_timeout_ms = 500U;
+
+  HAL_UART_Transmit(&huart3, (uint8_t *)boot_msg, (uint16_t)strlen(boot_msg), 100);
+  printf("[ESP32 UART3] task ready, waiting commands...\r\n");
+
+  for (;;)
+  {
+    rx_status = HAL_UART_Receive(&huart3, &rx, 1, 20);
+
+    if (rx_status == HAL_OK)
+    {
+      uint32_t now = HAL_GetTick();
+
+      if ((idx > 0U) && ((now - last_rx_tick) > inter_byte_timeout_ms))
+      {
+        cmd[idx] = '\0';
+        ESP32_UART3_ProcessCmd(cmd, &last_unlock_tick, unlock_hold_ms, &is_unlocked);
+        idx = 0;
+        memset(cmd, 0, sizeof(cmd));
+      }
+
+      last_rx_tick = now;
+    #if UART3_LOG_RX_BYTES
+      printf("[UART3 RX] 0x%02X\r\n", rx);
+    #endif
+
+      if ((rx == '\r') || (rx == '\n'))
+      {
+        if (idx > 0)
+        {
+          cmd[idx] = '\0';
+          ESP32_UART3_ProcessCmd(cmd, &last_unlock_tick, unlock_hold_ms, &is_unlocked);
+
+          idx = 0;
+          memset(cmd, 0, sizeof(cmd));
+        }
+      }
+      else if (idx < (sizeof(cmd) - 1U))
+      {
+        cmd[idx++] = (char)rx;
+      }
+      else
+      {
+        idx = 0;
+        memset(cmd, 0, sizeof(cmd));
+        HAL_UART_Transmit(&huart3, (uint8_t *)"ERR:LEN\r\n", 9, 100);
+      }
+    }
+    else if (rx_status == HAL_ERROR)
+    {
+      uint32_t err = HAL_UART_GetError(&huart3);
+      if (err != HAL_UART_ERROR_NONE)
+      {
+        // Clear sticky UART errors (especially ORE) so receive can recover.
+        __HAL_UART_CLEAR_PEFLAG(&huart3);
+        __HAL_UART_CLEAR_FEFLAG(&huart3);
+        __HAL_UART_CLEAR_NEFLAG(&huart3);
+        __HAL_UART_CLEAR_OREFLAG(&huart3);
+        printf("[UART3 ERR] 0x%08lX\r\n", err);
+      }
+      idx = 0;
+      memset(cmd, 0, sizeof(cmd));
+    }
+
+    if (is_unlocked != 0U)
+    {
+      uint32_t now_tick = HAL_GetTick();
+      if ((now_tick - last_unlock_tick) >= unlock_hold_ms)
+      {
+        Servo_Lock();
+        is_unlocked = 0U;
+        HAL_UART_Transmit(&huart3, (uint8_t *)"ACK:AUTOLOCK\r\n", 13, 100);
+        printf("[ESP32 CMD] AUTO LOCK\r\n");
+      }
+    }
+
+    osDelay(5);
   }
 }
 /* USER CODE END Application */

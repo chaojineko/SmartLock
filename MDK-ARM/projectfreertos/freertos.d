@@ -48,3 +48,7 @@ projectfreertos\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTO
 projectfreertos\freertos.o: ../Core/Src/MENU/menu.h
 projectfreertos\freertos.o: ../Core/Src/RFID/rc522.h
 projectfreertos\freertos.o: D:\keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+projectfreertos\freertos.o: D:\keil_v5\ARM\ARMCC\Bin\..\include\string.h
+projectfreertos\freertos.o: D:\keil_v5\ARM\ARMCC\Bin\..\include\ctype.h
+projectfreertos\freertos.o: ../Core/Inc/usart.h
+projectfreertos\freertos.o: ../Core/Inc/servo.h

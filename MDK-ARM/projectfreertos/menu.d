@@ -57,3 +57,5 @@ projectfreertos\menu.o: ../Core/Inc/uart_debug.h
 projectfreertos\menu.o: ../Core/Inc/servo.h
 projectfreertos\menu.o: ../Core/Inc/sfm.h
 projectfreertos\menu.o: ../Core/Src/RFID/rc522.h
+projectfreertos\menu.o: ../Core/Inc/usart.h
+projectfreertos\menu.o: ..\Core\Src\MENU\../FLASH/flash.h

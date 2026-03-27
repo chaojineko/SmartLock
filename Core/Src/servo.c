@@ -30,6 +30,10 @@
 #define SERVO_LOCK_ANGLE        0.0f
 #define SERVO_UNLOCK_ANGLE      90.0f
 #define BEEP_PULSE_MS           120U
+#define SERVO_STEP_DEGREE       2.5f
+#define SERVO_STEP_DELAY_MS     15U
+
+static float g_servo_current_angle = SERVO_LOCK_ANGLE;
 
 /**
  * @brief  Initialize servo control with PWM
@@ -42,6 +46,42 @@ void Servo_Init(void)
     Servo_Lock();
     osDelay(500);
     //Servo_Unlock();
+}
+
+static void Servo_MoveToAngle(float target_angle)
+{
+    float angle = g_servo_current_angle;
+
+    if (target_angle > angle)
+    {
+        while (angle < target_angle)
+        {
+            angle += SERVO_STEP_DEGREE;
+            if (angle > target_angle)
+            {
+                angle = target_angle;
+            }
+
+            Servo_SetAngle(angle);
+            osDelay(SERVO_STEP_DELAY_MS);
+        }
+    }
+    else
+    {
+        while (angle > target_angle)
+        {
+            angle -= SERVO_STEP_DEGREE;
+            if (angle < target_angle)
+            {
+                angle = target_angle;
+            }
+
+            Servo_SetAngle(angle);
+            osDelay(SERVO_STEP_DELAY_MS);
+        }
+    }
+
+    g_servo_current_angle = target_angle;
 }
 
 /**
@@ -65,6 +105,7 @@ void Servo_SetAngle(float angle)
 
     /* Set PWM compare value */
     __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, pulse);
+    g_servo_current_angle = angle;
 }
 
 /**
@@ -73,7 +114,7 @@ void Servo_SetAngle(float angle)
  */
 void Servo_Lock(void)
 {
-    Servo_SetAngle(SERVO_LOCK_ANGLE);
+    Servo_MoveToAngle(SERVO_LOCK_ANGLE);
 }
 
 /**
@@ -86,5 +127,5 @@ void Servo_Unlock(void)
     osDelay(BEEP_PULSE_MS);
     HAL_GPIO_WritePin(BEEP_GPIO_Port, BEEP_Pin, GPIO_PIN_RESET);
 
-    Servo_SetAngle(SERVO_UNLOCK_ANGLE);
+    Servo_MoveToAngle(SERVO_UNLOCK_ANGLE);
 }
