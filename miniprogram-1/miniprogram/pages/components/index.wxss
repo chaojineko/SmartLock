@@ -1,0 +1,28 @@
+page {
+  background: #f7f8fa;
+}
+
+.page {
+  padding: 24rpx;
+}
+
+.tip {
+  color: #58687a;
+  margin-bottom: 16rpx;
+  font-size: 24rpx;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 14rpx;
+  padding: 18rpx;
+  margin-bottom: 12rpx;
+}
+
+.status {
+  color: #1f5aa2;
+  font-size: 22rpx;
+}

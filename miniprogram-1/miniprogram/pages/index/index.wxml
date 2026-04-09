@@ -1,0 +1,16 @@
+<scroll-view class="page" scroll-y="true">
+  <view class="hero">
+    <text class="hero-title">{{appName}}</text>
+    <text class="hero-subtitle">{{slogan}}</text>
+    <text class="login-badge">当前状态: {{loginText}}</text>
+  </view>
+
+  <view class="section-title">推荐入口</view>
+  <view class="cards">
+    <view class="card" wx:for="{{cards}}" wx:key="path" data-path="{{item.path}}" bindtap="goToPage">
+      <text class="card-title">{{item.title}}</text>
+      <text class="card-desc">{{item.desc}}</text>
+      <text class="card-action">进入</text>
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,7 @@
+-- The C compiler identification is unknown
+-- The CXX compiler identification is GNU 9.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - failed
+-- Check for working C compiler: C:/Program Files/cygwin64/bin/cc
+-- Check for working C compiler: C:/Program Files/cygwin64/bin/cc - broken
+-- Configuring incomplete, errors occurred!

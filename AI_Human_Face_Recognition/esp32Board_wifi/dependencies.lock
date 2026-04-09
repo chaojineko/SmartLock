@@ -1,0 +1,17 @@
+dependencies:
+  esp-code-scanner:
+    dependencies: []
+    source:
+      path: C:\Users\13753\Desktop\CODE\esp-idf-v5.4.1\AI_Human_Face_Recognition\components\esp-code-scanner
+      type: local
+    version: '*'
+  idf:
+    source:
+      type: idf
+    version: 5.4.1
+direct_dependencies:
+- esp-code-scanner
+- idf
+manifest_hash: 6cc1ce7b361ff398576902122f614bb2294dd83c798ae0b0c992b4dc5c43f1dd
+target: esp32s3
+version: 2.0.0

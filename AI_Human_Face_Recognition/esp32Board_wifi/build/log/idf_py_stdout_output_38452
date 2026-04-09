@@ -1,0 +1,51 @@
+[1/10] Performing build step for 'bootloader'
+[1/1] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\13753\Desktop\CODE\esp-idf-v5.4.1\AI_Human_Face_Recognition\esp32Board_wifi\build\bootloader\esp-idf\esptool_py && C:\Users\13753\Desktop\CODE\esp-idf-v5.4.1\tools\python_env\idf5.4_py3.12_env\Scripts\python.exe C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/build/bootloader/bootloader.bin"
+Bootloader binary size 0x3e80 bytes. 0x4180 bytes (51%) free.
+[2/10] No install step for 'bootloader'
+[3/10] Completed 'bootloader'
+[4/10] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/ai/yahboom_human_face_recognition.cpp.obj
+C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/main/ai/yahboom_human_face_recognition.cpp: In function 'void qr_handle_payload(const char*)':
+C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/main/ai/yahboom_human_face_recognition.cpp:409:10: warning: variable 'extract_json_int64' set but not used [-Wunused-but-set-variable]
+  409 |     auto extract_json_int64 = [](const char *json, const char *key, int64_t *out) -> bool {
+      |          ^~~~~~~~~~~~~~~~~~
+C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/main/ai/yahboom_human_face_recognition.cpp: In function 'void task_process_handler(void*)':
+C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/main/ai/yahboom_human_face_recognition.cpp:781:9: warning: unused variable 'partition_result' [-Wunused-variable]
+  781 |     int partition_result = recognizer->set_ids_from_flash();
+      |         ^~~~~~~~~~~~~~~~
+C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/main/ai/yahboom_human_face_recognition.cpp: At global scope:
+C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/main/ai/yahboom_human_face_recognition.cpp:288:13: warning: 'bool qr_prepare_gray_from_frame(const camera_fb_t*, uint32_t, uint32_t)' defined but not used [-Wunused-function]
+  288 | static bool qr_prepare_gray_from_frame(const camera_fb_t *frame, uint32_t dst_w, uint32_t dst_h)
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/main/ai/yahboom_human_face_recognition.cpp:243:13: warning: 'void qr_get_scan_size(uint32_t, uint32_t, uint32_t*, uint32_t*)' defined but not used [-Wunused-function]
+  243 | static void qr_get_scan_size(uint32_t src_w, uint32_t src_h, uint32_t *dst_w, uint32_t *dst_h)
+      |             ^~~~~~~~~~~~~~~~
+C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/main/ai/yahboom_human_face_recognition.cpp:214:13: warning: 'void qr_binarize_inplace(uint8_t*, size_t)' defined but not used [-Wunused-function]
+  214 | static void qr_binarize_inplace(uint8_t *buf, size_t len)
+      |             ^~~~~~~~~~~~~~~~~~~
+C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/main/ai/yahboom_human_face_recognition.cpp:172:13: warning: 'bool qr_prepare_gray_buffer(uint32_t, uint32_t)' defined but not used [-Wunused-function]
+  172 | static bool qr_prepare_gray_buffer(uint32_t width, uint32_t height)
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+[5/10] Linking C static library esp-idf\main\libmain.a
+[6/10] Generating ld/sections.ld
+[7/10] Linking CXX executable AI_Human_Face_Recognition.elf
+[8/10] Generating binary image from built executable
+esptool.py v4.11.0
+Creating esp32s3 image...
+Merged 2 ELF sections
+Successfully created esp32s3 image.
+Generated C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/build/AI_Human_Face_Recognition.bin
+[9/10] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\13753\Desktop\CODE\esp-idf-v5.4.1\AI_Human_Face_Recognition\esp32Board_wifi\build\esp-idf\esptool_py && C:\Users\13753\Desktop\CODE\esp-idf-v5.4.1\tools\python_env\idf5.4_py3.12_env\Scripts\python.exe C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/build/partition_table/partition-table.bin C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/build/AI_Human_Face_Recognition.bin"
+AI_Human_Face_Recognition.bin binary size 0x373640 bytes. Smallest app partition is 0x3b6000 bytes. 0x429c0 bytes (7%) free.
+[9/10] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\13753\Desktop\CODE\esp-idf-v5.4.1\components\esptool_py && C:\Users\13753\Desktop\CODE\esp-idf-v5.4.1\tools\tools\cmake\3.30.2\bin\cmake.exe -D IDF_PATH=C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1 -D SERIAL_TOOL=C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/tools/python_env/idf5.4_py3.12_env/Scripts/python.exe;;C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/components/esptool_py/esptool/esptool.py;--chip;esp32s3 -D SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;--no-stub;write_flash;@flash_args -D WORKING_DIRECTORY=C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/build -P C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/components/esptool_py/run_serial_tool.cmake"
+esptool.py --chip esp32s3 -p com5 -b 460800 --before=default_reset --after=hard_reset --no-stub write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x0 bootloader/bootloader.bin 0x10000 AI_Human_Face_Recognition.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.11.0
+Serial port com5
+Connecting...
+Failed to get PID of a device on com5, using standard reset sequence.
+...................................
+
+A fatal error occurred: Failed to connect to ESP32-S3: Invalid head of packet (0x66): Possible serial noise or corruption.
+For troubleshooting steps visit: https://docs.espressif.com/projects/esptool/en/latest/troubleshooting.html
+FAILED: CMakeFiles/flash C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/build/CMakeFiles/flash 
+C:\Windows\system32\cmd.exe /C "cd /D C:\Users\13753\Desktop\CODE\esp-idf-v5.4.1\components\esptool_py && C:\Users\13753\Desktop\CODE\esp-idf-v5.4.1\tools\tools\cmake\3.30.2\bin\cmake.exe -D IDF_PATH=C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1 -D SERIAL_TOOL=C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/tools/python_env/idf5.4_py3.12_env/Scripts/python.exe;;C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/components/esptool_py/esptool/esptool.py;--chip;esp32s3 -D SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;--no-stub;write_flash;@flash_args -D WORKING_DIRECTORY=C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/esp32Board_wifi/build -P C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/components/esptool_py/run_serial_tool.cmake"
+ninja: build stopped: subcommand failed.

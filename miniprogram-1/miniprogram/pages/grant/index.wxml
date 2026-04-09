@@ -1,0 +1,69 @@
+<view class="page">
+  <view class="card">
+    <view class="label">门锁 ID</view>
+    <input class="input" value="{{lockId}}" placeholder="请输入门锁ID" bindinput="onLockIdInput" />
+  </view>
+
+  <view class="card">
+    <view class="label">生效模式</view>
+    <radio-group class="mode-group" bindchange="onModeChange">
+      <label class="mode-item">
+        <radio value="duration" checked="{{timeMode === 'duration'}}" />
+        <text>从现在开始按时长生效</text>
+      </label>
+      <label class="mode-item">
+        <radio value="window" checked="{{timeMode === 'window'}}" />
+        <text>按指定开始/结束时间生效</text>
+      </label>
+    </radio-group>
+  </view>
+
+  <view class="card" wx:if="{{timeMode === 'duration'}}">
+    <view class="label">生效时长（分钟）</view>
+    <input
+      class="input"
+      type="number"
+      value="{{durationMinInput}}"
+      placeholder="请输入分钟，例如 30"
+      bindinput="onDurationInput"
+    />
+  </view>
+
+  <view class="card" wx:if="{{timeMode === 'window'}}">
+    <view class="label">开始时间</view>
+    <view class="row">
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+        <view class="picker half">{{startDate}}</view>
+      </picker>
+      <picker mode="time" value="{{startTime}}" bindchange="onStartTimeChange">
+        <view class="picker half">{{startTime}}</view>
+      </picker>
+    </view>
+
+    <view class="label mt">结束时间</view>
+    <view class="row">
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+        <view class="picker half">{{endDate}}</view>
+      </picker>
+      <picker mode="time" value="{{endTime}}" bindchange="onEndTimeChange">
+        <view class="picker half">{{endTime}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <button class="primary" loading="{{loading}}" bindtap="createGrant">生成临时二维码</button>
+
+  <view class="result" wx:if="{{grantToken}}">
+    <image class="qr" wx:if="{{qrImagePath}}" src="{{qrImagePath}}" mode="aspectFit" />
+    <view class="qr-fallback" wx:else>
+      暂无二维码图片
+    </view>
+
+    <view class="token">Token: {{grantToken}}</view>
+    <view class="expire">{{statusText}}</view>
+    <view class="tip">剩余 {{remainingSec}} 秒</view>
+    <view class="tip" wx:if="{{qrSourceType}}">图片来源: {{qrSourceType}}</view>
+
+    <view class="tip" wx:if="{{tips}}">{{tips}}</view>
+  </view>
+</view>

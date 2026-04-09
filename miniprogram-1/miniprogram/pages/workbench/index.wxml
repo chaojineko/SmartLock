@@ -1,0 +1,22 @@
+<view class="page">
+  <view class="tip">这里是工作台骨架页，示例为 mock 异步数据流。</view>
+
+  <view class="actions">
+    <button class="primary" bindtap="goGrantPage">生成临时二维码</button>
+    <button class="secondary" bindtap="goActiveGrantPage">查看生效中二维码</button>
+  </view>
+
+  <view class="ble-card">
+    <text class="ble-title">蓝牙解锁</text>
+    <text class="ble-desc">先在门锁菜单选择 BLE Unlock，再点击下方按钮。</text>
+    <button class="ble-btn" loading="{{bleBusy}}" bindtap="handleBleUnlockTap">蓝牙解锁</button>
+    <text class="ble-status">{{bleStatus}}</text>
+  </view>
+
+  <ui-state loading="{{loading}}" empty="{{!loading && items.length === 0}}" loadingText="加载工作台数据..." emptyText="当前没有模块数据" />
+
+  <view class="card" wx:for="{{items}}" wx:key="id" wx:if="{{items.length > 0}}">
+    <text class="title">{{item.title}}</text>
+    <text class="desc">创建时间: {{item.createdAt}}</text>
+  </view>
+</view>

@@ -1,0 +1,11 @@
+.state {
+  background: #eef3fb;
+  border-radius: 12rpx;
+  padding: 18rpx;
+  text-align: center;
+}
+
+.text {
+  color: #5f7086;
+  font-size: 24rpx;
+}

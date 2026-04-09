@@ -1,0 +1,8 @@
+<view class="page">
+  <view class="avatar"></view>
+  <text class="name">{{nickname}}</text>
+  <text class="meta">用户ID: {{userId}}</text>
+  <button class="action" bindtap="loginByWechat" loading="{{isLogging}}" wx:if="{{!isLogin}}">微信登录</button>
+  <button class="action warn" bindtap="logout" wx:if="{{isLogin}}">退出登录</button>
+  <text class="tip">后续可在此扩展登录态、权限和个人设置。</text>
+</view>

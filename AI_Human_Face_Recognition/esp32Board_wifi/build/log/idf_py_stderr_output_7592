@@ -1,0 +1,11 @@
+fatal: not a git repository (or any of the parent directories): .git
+info: Choice SPIRAM_SPEED has multiple active selections. The last one will be used: SPIRAM_SPEED_80M .
+info: Trying to set symbol ESP32S3_DATA_CACHE_LINE_32B to n, but it is currently selected by choice ESP32S3_DATA_CACHE_LINE_SIZE. For setting it to n, set another choice symbol to y instead.
+fatal: not a git repository (or any of the parent directories): .git
+CMake Warning at C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/tools/cmake/component.cmake:297 (message):
+  No source files found for SRC_DIRS entry 'web'.
+Call Stack (most recent call first):
+  C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/tools/cmake/component.cmake:454 (__component_add_sources)
+  C:/Users/13753/Desktop/CODE/esp-idf-v5.4.1/AI_Human_Face_Recognition/components/modules/CMakeLists.txt:32 (idf_component_register)
+
+

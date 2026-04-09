@@ -1,0 +1,23 @@
+<view class="page">
+  <ui-state
+    loading="{{loading}}"
+    empty="{{!loading && list.length === 0}}"
+    loadingText="正在加载生效二维码..."
+    emptyText="当前没有可管理二维码"
+  />
+
+  <view class="card" wx:for="{{list}}" wx:key="grantId" wx:if="{{list.length > 0}}">
+    <view class="head">
+      <text class="lock">门锁: {{item.lockId}}</text>
+      <text class="remain">{{item.stateText}} / 剩余 {{item.remainMin}} 分钟</text>
+    </view>
+
+    <image class="qr" wx:if="{{item.qrImagePath}}" src="{{item.qrImagePath}}" mode="aspectFit" />
+    <view class="qr-fallback" wx:else>二维码图片不可用</view>
+
+    <view class="meta">有效时间: {{item.validRangeText}}</view>
+    <view class="meta token">Token: {{item.grantToken}}</view>
+
+    <button class="danger" data-id="{{item.grantId}}" bindtap="onRevokeTap">手动失效</button>
+  </view>
+</view>

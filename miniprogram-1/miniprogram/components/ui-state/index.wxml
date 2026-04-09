@@ -1,0 +1,4 @@
+<view class="state" wx:if="{{loading || empty}}">
+  <text class="text" wx:if="{{loading}}">{{loadingText}}</text>
+  <text class="text" wx:elif="{{empty}}">{{emptyText}}</text>
+</view>

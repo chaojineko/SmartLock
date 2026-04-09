@@ -1,0 +1,7 @@
+<view class="page">
+  <view class="tip">组件目录页，用于沉淀公共 UI。</view>
+  <view class="item" wx:for="{{list}}" wx:key="name">
+    <text>{{item.name}}</text>
+    <text class="status">{{item.status}}</text>
+  </view>
+</view>

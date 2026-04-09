@@ -1,0 +1,115 @@
+page {
+  background: #f7f8fa;
+}
+
+.page {
+  padding: 24rpx;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.label {
+  color: #5b6a7a;
+  font-size: 24rpx;
+  margin-bottom: 10rpx;
+}
+
+.mt {
+  margin-top: 14rpx;
+}
+
+.mode-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.mode-item {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  color: #2b3b4b;
+  font-size: 26rpx;
+}
+
+.row {
+  display: flex;
+  gap: 12rpx;
+}
+
+.input {
+  background: #f1f4f7;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  font-size: 26rpx;
+  color: #1f2a36;
+}
+
+.picker {
+  background: #f1f4f7;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  font-size: 26rpx;
+  color: #1f2a36;
+}
+
+.half {
+  min-width: 300rpx;
+  text-align: center;
+}
+
+.primary {
+  margin-top: 8rpx;
+  background: #1f5aa2;
+  color: #ffffff;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+}
+
+.result {
+  margin-top: 24rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  text-align: center;
+}
+
+.qr {
+  width: 360rpx;
+  height: 360rpx;
+  margin: 0 auto 16rpx;
+}
+
+.qr-fallback {
+  width: 360rpx;
+  height: 360rpx;
+  margin: 0 auto 16rpx;
+  border: 2rpx dashed #c5d0db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7a8794;
+  font-size: 24rpx;
+}
+
+.token {
+  font-size: 22rpx;
+  color: #334455;
+  margin-bottom: 6rpx;
+}
+
+.expire {
+  font-size: 24rpx;
+  color: #1f5aa2;
+}
+
+.tip {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #8a97a4;
+}

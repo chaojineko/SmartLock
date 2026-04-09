@@ -1,0 +1,10 @@
+{
+  "name": "createGrant",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "wx-server-sdk": "latest"
+  }
+}

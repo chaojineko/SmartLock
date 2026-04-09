@@ -1,0 +1,53 @@
+page {
+  background: #f7f8fa;
+}
+
+.page {
+  padding: 36rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 70rpx;
+  background: linear-gradient(135deg, #9bbbe2, #6d93c8);
+}
+
+.name {
+  margin-top: 16rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #243548;
+}
+
+.meta {
+  margin-top: 6rpx;
+  color: #58687a;
+  font-size: 24rpx;
+}
+
+.action {
+  margin-top: 20rpx;
+  width: 340rpx;
+  border-radius: 12rpx;
+  background: #1f5aa2;
+  color: #ffffff;
+  font-size: 26rpx;
+}
+
+.action::after {
+  border: 0;
+}
+
+.warn {
+  background: #b84f4f;
+}
+
+.tip {
+  margin-top: 24rpx;
+  color: #617286;
+  font-size: 24rpx;
+}

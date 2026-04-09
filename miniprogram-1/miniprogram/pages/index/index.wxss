@@ -1,0 +1,90 @@
+page {
+  min-height: 100%;
+  background: linear-gradient(180deg, #ecf3ff 0%, #f7f8fa 42%, #f7f8fa 100%);
+  color: #1f2d3d;
+}
+
+.page {
+  padding: 28rpx 28rpx 40rpx;
+  box-sizing: border-box;
+}
+
+.hero {
+  background: linear-gradient(132deg, #1f4b8f 0%, #2f6eb8 58%, #5d95d6 100%);
+  border-radius: 26rpx;
+  padding: 32rpx;
+  color: #ffffff;
+  box-shadow: 0 16rpx 30rpx rgba(16, 55, 105, 0.24);
+}
+
+.hero-title {
+  font-size: 42rpx;
+  font-weight: 700;
+  display: block;
+}
+
+.hero-subtitle {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  display: block;
+  opacity: 0.92;
+}
+
+.login-badge {
+  margin-top: 14rpx;
+  display: inline-block;
+  font-size: 22rpx;
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.list-title {
+  margin-top: 22rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.section-title {
+  margin-top: 24rpx;
+  margin-bottom: 16rpx;
+  font-size: 30rpx;
+  color: #2f3e50;
+  font-weight: 700;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.card {
+  background: #ffffff;
+  border: 2rpx solid #e6edf8;
+  border-radius: 18rpx;
+  padding: 20rpx;
+  box-shadow: 0 8rpx 20rpx rgba(16, 55, 105, 0.06);
+}
+
+.card-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #243548;
+}
+
+.card-desc {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #617286;
+}
+
+.card-action {
+  display: inline-block;
+  margin-top: 10rpx;
+  color: #1f5aa2;
+  font-weight: 700;
+  font-size: 24rpx;
+}
