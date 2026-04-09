@@ -1,0 +1,12 @@
+projectfreertos\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c
+projectfreertos\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+projectfreertos\port.o: D:\keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+projectfreertos\port.o: D:\keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+projectfreertos\port.o: ../Core/Inc/FreeRTOSConfig.h
+projectfreertos\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+projectfreertos\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+projectfreertos\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+projectfreertos\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+projectfreertos\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+projectfreertos\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+projectfreertos\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
