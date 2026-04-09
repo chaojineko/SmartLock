@@ -65,9 +65,9 @@
 
 ```text
 <workspace-root>/
-	miniprogram-1/
-	AI_Human_Face_Recognition/
-	projectfreertos/
+    miniprogram-1/
+    AI_Human_Face_Recognition/
+    projectfreertos/
 ```
 
 ## 快速联调流程
