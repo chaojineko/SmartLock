@@ -22,6 +22,9 @@
 
 /* USER CODE BEGIN 0 */
 
+#define RTC_INIT_MAGIC_VALUE 0x5AA5U
+#define RTC_INIT_MAGIC_BKP_REG RTC_BKP_DR1
+
 /* USER CODE END 0 */
 
 RTC_HandleTypeDef hrtc;
@@ -33,9 +36,6 @@ void MX_RTC_Init(void)
   /* USER CODE BEGIN RTC_Init 0 */
 
   /* USER CODE END RTC_Init 0 */
-
-  RTC_TimeTypeDef sTime = {0};
-  RTC_DateTypeDef sDate = {0};
 
   /* USER CODE BEGIN RTC_Init 1 */
 
@@ -57,28 +57,39 @@ void MX_RTC_Init(void)
 
   /* USER CODE BEGIN Check_RTC_BKUP */
 
+  HAL_PWR_EnableBkUpAccess();
+
   /* USER CODE END Check_RTC_BKUP */
 
-  /** Initialize RTC and set the Time and Date
-  */
-  sTime.Hours = 20;
-  sTime.Minutes = 0;
-  sTime.Seconds = 0;
-  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
-  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+  if (HAL_RTCEx_BKUPRead(&hrtc, RTC_INIT_MAGIC_BKP_REG) != RTC_INIT_MAGIC_VALUE)
   {
-    Error_Handler();
-  }
-  sDate.WeekDay = RTC_WEEKDAY_THURSDAY;
-  sDate.Month = RTC_MONTH_MARCH;
-  sDate.Date = 19;
-  sDate.Year = 26;
+    RTC_TimeTypeDef sTime = {0};
+    RTC_DateTypeDef sDate = {0};
 
-  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
-  {
-    Error_Handler();
+    /** Initialize RTC and set the Time and Date (only once on first boot)
+    */
+    sTime.Hours = 16;
+    sTime.Minutes = 36;
+    sTime.Seconds = 0;
+    sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+    sTime.StoreOperation = RTC_STOREOPERATION_RESET;
+    if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    sDate.WeekDay = RTC_WEEKDAY_SATURDAY;
+    sDate.Month = RTC_MONTH_APRIL;
+    sDate.Date = 18;
+    sDate.Year = 26;
+    if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    HAL_RTCEx_BKUPWrite(&hrtc, RTC_INIT_MAGIC_BKP_REG, RTC_INIT_MAGIC_VALUE);
   }
+
   /* USER CODE BEGIN RTC_Init 2 */
 
   /* USER CODE END RTC_Init 2 */
